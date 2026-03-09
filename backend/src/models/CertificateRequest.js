@@ -1,0 +1,48 @@
+const mongoose=require("mongoose");
+const certificationRequestSchema=new mongoose.Schema({
+    student:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        require:true
+    },
+    certificateType:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    reason:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    status:{
+        type:String,
+        enum:["pending","approved","rejected"],
+        default:"pending"
+    },
+    reviewedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        default:null
+
+    },
+    reviewedAt:{
+        type:Date,
+        default:null,
+    },
+    collectionOffice:{
+        type:String,
+        trim:true,
+        default:null
+    },
+    collectionDate:{
+        type:Date,
+        default:null,
+    },
+    rejectionReason:{
+        type:String,
+        trim:true,
+        default:null
+    },
+},{timestamps:true});
+module.exports=mongoose.model("CertificateRequest",certificationRequestSchema);

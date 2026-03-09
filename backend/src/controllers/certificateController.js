@@ -1,0 +1,61 @@
+const CertificateRequest=require("../models/CertificateRequest");
+const createCertificateRequest=async (req,res)=>{
+    try{
+    const {certificateType,reason}=req.body;
+    if(!certificateType || !reason){
+        return res.status(400).json({message:"Certificate type and reason are required"});
+    }
+    const request=await CertificateRequest.create({
+        student:req.user._id,
+        certificateType,
+        reason,
+    });
+    return res.status(201).json({message:"Certificate Request created successfully"});
+    }catch(error){
+        return res.status(500).json({message:"Failed to create certificate request",error:error.message});
+    }
+
+
+};
+const getMyCertificateRequests=async (req,res)=>{
+    try{
+        const requests=await CertificateRequest.find({
+            student:req.user._id
+        }).populate("student","name email role").sort({createdAt:-1});
+        return res.status(200).json({message:"My certficate request fetched successfully",count:requests.length,requests});
+
+    }catch(error){
+        return res.status(500).json({message:"Failed to fetch my certificates requests",error:error.message});
+    }
+}
+const getAllCertificateRequests=async(req,res)=>{
+    try{
+        const requests=await CertificateRequest.find().populate("student","name email role").sort({createdAt:-1});
+        return res.status(200).json({message:"All Certificate Requests fetched successfully",count:requests.length,requests});
+
+    }catch(error){
+        return res.status(500).json({message:"Failed to fetch certificate requests",error:error.message});
+    }
+};
+const updateCertificateRequestStatus=async(req,res)=>{
+    try{
+        const {status}=req.body;
+        if(!status || !["approved","rejected"].includes(status)){
+            return res.status(400).json({message:"Status must be either approved or rejected"});
+        }
+        const request=await CertificateRequest.findById(req.params.id);
+        if(!request){
+            return res.status(404).json({message:"Certificate request not found"});
+        }
+        request.status=status;
+        request.reviewedBy=req.user._id;
+        request.reviewedAt=new Date();
+        await request.save();
+        return res.status(200).json({message:`Certificate request ${status} successfully`});
+    }
+
+    catch(error){
+        return res.status(500).json({message:"Failed to update certificate request status",error:error.message});
+    }
+};
+module.exports={createCertificateRequest,getMyCertificateRequests,getAllCertificateRequests,updateCertificateRequestStatus};
