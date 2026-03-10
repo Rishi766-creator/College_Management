@@ -1,4 +1,6 @@
 const CertificateRequest=require("../models/CertificateRequest");
+const User=require("../models/User");
+const sendEmail=require("../utils/sendEmail");
 const createCertificateRequest=async (req,res)=>{
     try{
     const {certificateType,reason}=req.body;
@@ -39,18 +41,44 @@ const getAllCertificateRequests=async(req,res)=>{
 };
 const updateCertificateRequestStatus=async(req,res)=>{
     try{
-        const {status}=req.body;
+        const {status,collectionOffice,collectionDate,rejectionReason}=req.body;
         if(!status || !["approved","rejected"].includes(status)){
             return res.status(400).json({message:"Status must be either approved or rejected"});
         }
-        const request=await CertificateRequest.findById(req.params.id);
+        const request=await CertificateRequest.findById(req.params.id).populate("student","name email ");
         if(!request){
             return res.status(404).json({message:"Certificate request not found"});
         }
         request.status=status;
         request.reviewedBy=req.user._id;
         request.reviewedAt=new Date();
+        if(status=="approved"){
+            if(!collectionOffice || !collectionDate){
+                return res.status(400).json({message:"Collection Office and Collection dates are required for approval"});
+            }
+        
+        request.collectionoffice=collectionOffice;
+        request.collectionDate=collectionDate;
+        request.rejectionReason=null;
+
         await request.save();
+        await sendEmail({
+            to:request.student.email,
+            subject:"Certificate Request Approved",
+            text:`Hello ${request.student.name},your ${request.certificateType} request has been approved.Please collect it from ${collectionOffice} on ${new Date(collectionDate).toLocaleString()}`
+        });
+        };
+        if(status=="rejected"){
+            request.rejectionReason=rejectionReason||"No reason provided";
+            request.collectionOffice=null;
+            request.collectionDate=null;
+            await request.save();
+            await sendEmail({
+                to:request.student.email,
+                subject:"Certificate Request Rejected",
+                text:`Hello ${request.student.name},your ${request.certificateType} request has been rejected.Reason:${request.rejectionReason}`,
+            });
+        }
         return res.status(200).json({message:`Certificate request ${status} successfully`});
     }
 
