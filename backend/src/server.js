@@ -6,6 +6,7 @@ const certificateRoutes=require("./routes/certificateRoutes");
 const facultyLeaveRoutes=require("./routes/facultyLeaveRoutes");
 const eventRequestRoutes = require("./routes/eventRequestRoutes");
 const examRoutes=require("./routes/examRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
 const eventRoutes=require("./routes/eventRoutes");
 const cors=require("cors");
 const connectDB=require("./config/db");
@@ -24,6 +25,7 @@ app.use("/api/faculty-leaves",facultyLeaveRoutes);
 app.use("/api/event-requests", eventRequestRoutes);
 app.use("/api/exams",examRoutes);
 app.use("/api/events",eventRoutes);
+app.use("/api/attendance", attendanceRoutes);
 const PORT=process.env.PORT||5000;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
