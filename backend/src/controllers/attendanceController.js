@@ -6,28 +6,50 @@ const markAttendance = async (req, res) => {
   try {
     const { subject, date, semester, section, department, records } = req.body;
 
-    if (!subject || !date || !semester || !section || !department || !records || records.length === 0) {
+    if (
+      !subject ||
+      !date ||
+      !semester ||
+      !section ||
+      !department ||
+      !records ||
+      records.length === 0
+    ) {
       return res.status(400).json({
         message: "Subject, date, semester, section, department, and records are required",
       });
     }
 
-    const attendanceDocs = records.map((record) => ({
-      student: record.studentId,
-      faculty: req.user._id,
-      subject,
-      date,
-      status: record.status,
-      semester,
-      section,
-      department,
-    }));
+    const attendanceDate = new Date(date);
 
-    await Attendance.insertMany(attendanceDocs);
+    for (const record of records) {
+      await Attendance.findOneAndUpdate(
+        {
+          student: record.studentId,
+          subject,
+          date: attendanceDate,
+        },
+        {
+          student: record.studentId,
+          faculty: req.user._id,
+          subject,
+          date: attendanceDate,
+          status: record.status,
+          semester,
+          section,
+          department,
+        },
+        {
+          new: true,
+          upsert: true,
+          runValidators: true,
+        }
+      );
+    }
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: "Attendance marked successfully",
-      count: attendanceDocs.length,
+      count: records.length,
     });
   } catch (error) {
     return res.status(500).json({
@@ -36,7 +58,6 @@ const markAttendance = async (req, res) => {
     });
   }
 };
-
 const getMyAttendance = async (req, res) => {
   try {
     const attendance = await Attendance.find({
