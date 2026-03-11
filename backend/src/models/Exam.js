@@ -1,0 +1,48 @@
+const mongoose=require("mongoose");
+const examSchema=new mongoose.Schema({
+    subject:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    examDate:{
+        type:Date,
+        required:true
+    },
+    startTime:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    endTime:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    venue:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    semester:{
+        type:Number,
+        required:true
+    },
+    section:{
+        type:String,
+        trim:true,
+        default:null
+
+    },
+    department:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    }
+},{timestamps:true});
+module.exports=mongoose.model("Exam",examSchema);
