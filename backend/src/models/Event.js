@@ -1,0 +1,39 @@
+const mongoose=require("mongoose");
+const eventSchema=new mongoose.Schema({
+    title:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    description:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    eventDate:{
+        type:Date,
+        required:true,
+    },
+    venue:{
+        type:String,
+        required:true,
+        trim:true,
+    },
+    audience:{
+        type:[String],
+        enum:["student","faculty"],
+        required:true,
+    },
+    createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        default:null
+    },
+    relatedRequest:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"EventRequest",
+        default:null
+    }
+
+},{timestamps:true});
+module.exports=mongoose.model("Event",eventSchema);
