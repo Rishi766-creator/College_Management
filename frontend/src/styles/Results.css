@@ -1,0 +1,38 @@
+.results-card {
+  background: #111827;
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  margin: 20px auto;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.results-card h2 {
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.results-card p {
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.results-card .action-btn {
+  padding: 12px 25px;
+  background: #00c853;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.results-card .action-btn:hover {
+  background: #22c55e;
+  transform: translateY(-2px);
+}

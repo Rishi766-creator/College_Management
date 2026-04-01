@@ -57,7 +57,7 @@ const updateCertificateRequestStatus=async(req,res)=>{
                 return res.status(400).json({message:"Collection Office and Collection dates are required for approval"});
             }
         
-        request.collectionoffice=collectionOffice;
+        request.collectionOffice=collectionOffice;
         request.collectionDate=collectionDate;
         request.rejectionReason=null;
 

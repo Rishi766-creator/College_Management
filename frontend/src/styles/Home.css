@@ -1,0 +1,58 @@
+.home-container {
+  height: 100vh;
+  width: 100%;
+  background-image: url("/src/assets/college.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-content {
+  text-align: center;
+  color: white;
+  width: 60%;
+}
+
+.title {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.title span {
+  color: #00e5ff;
+}
+
+.subtitle {
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: #dcdcdc;
+}
+
+.start-btn {
+  padding: 15px 40px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(45deg,#00e5ff,#00ffa6);
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(0,229,255,0.6);
+}
+
+.start-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0,229,255,1),
+              0 0 20px rgba(0,255,166,0.8);
+}

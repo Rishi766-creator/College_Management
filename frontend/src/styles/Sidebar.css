@@ -1,0 +1,102 @@
+.dashboard {
+  display: flex;
+  background: #0e0f0f;
+  min-height: 100vh;
+  font-family: Arial;
+  color: white;
+}
+
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #0c0c0c;
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  color: #3b82f6;
+  transform: scale(1.05);
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 6px;
+  transition: 0.3s;
+  position: relative;
+}
+
+.menu li:hover {
+  background: #1e293b;
+  transform: translateX(6px);
+}
+
+.menu li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #3b82f6;
+  opacity: 0;
+  transition: 0.3s;
+  border-radius: 4px;
+}
+
+.menu li:hover::before {
+  opacity: 1;
+}
+
+.sidebar-bottom button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.settings {
+  background: #334155;
+  color: white;
+}
+
+.settings:hover {
+  background: #475569;
+  transform: scale(1.05);
+}
+
+.logout {
+  background: #ef4444;
+  color: white;
+}
+
+.logout:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+}

@@ -1,0 +1,102 @@
+.requests-card {
+  background: #020617;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.requests-card h2 {
+  margin-bottom: 20px;
+  color: white;
+  text-align: center;
+}
+
+.request-grid {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.request-box {
+  flex: 1;
+  border: 1px solid #334155;
+  padding: 30px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.request-box:hover {
+  box-shadow: 0 0 15px #22c55e;
+}
+
+.leave-box { border-left: 5px solid #3b82f6; }
+.certificate-box { border-left: 5px solid #f59e0b; }
+.event-box { border-left: 5px solid #22c55e; }
+
+.request-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #111827;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-row label {
+  color: white;
+  flex: 1;
+  text-align: right;
+}
+
+.form-row input {
+  flex: 2;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #1e293b;
+  color: white;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.form-buttons button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s, box-shadow 0.3s;
+}
+
+.form-buttons button:hover {
+  box-shadow: 0 0 12px #22c55e;
+}
+
+.cancel-btn {
+  background: #ef4444;
+}
+
+.cancel-btn:hover {
+  box-shadow: 0 0 12px #ef4444;
+}
