@@ -14,9 +14,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/studentdashboard" element={<ProtectedRoute allowedRoles={["student"]}><StudentDashboard /></ProtectedRoute>} />
-        <Route path="/admindashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/facultydashboard" element={<ProtectedRoute allowedRoles={["faculty"]}><FacultyDashboard/></ProtectedRoute>}/>
+        <Route path="/studentdashboard" element={<StudentDashboard />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/facultydashboard" element={<FacultyDashboard />} />
       </Routes>
     </Router>
   );

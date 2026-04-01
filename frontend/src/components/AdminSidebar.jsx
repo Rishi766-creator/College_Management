@@ -4,18 +4,16 @@ import {
   FaClipboardList,
   FaBell,
   FaCalendarAlt,
-  FaSignOutAlt,FaCog
+  FaRegFileAlt   // ✅ added new icon
 } from "react-icons/fa";
+
 import "../styles/Sidebar.css";
 
 const AdminSidebar = ({ setActive }) => {
-
   return (
-
     <div className="sidebar">
 
       <div className="sidebar-top">
-
         <h2 className="logo">CMS</h2>
 
         <ul className="menu">
@@ -35,24 +33,21 @@ const AdminSidebar = ({ setActive }) => {
           <li onClick={() => setActive("notices")}>
             <FaBell /> Add Notices
           </li>
-           <li onClick={() => setActive("notices")}>
-            <FaBell /> My Notices
+
+          {/* ✅ UPDATED ICON */}
+          <li onClick={() => setActive("mynotices")}>
+            <FaRegFileAlt /> My Notices
           </li>
 
           <li onClick={() => setActive("events")}>
             <FaCalendarAlt /> Events & Exams
           </li>
-           
-        </ul>
 
+        </ul>
       </div>
 
-    
-
     </div>
-
   );
-
 };
 
 export default AdminSidebar;
