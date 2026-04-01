@@ -38,17 +38,7 @@ const FacultySidebar = ({ setActive }) => {
 
       </div>
 
-      <div className="sidebar-bottom">
-
-        <button className="settings">
-          <FaCog /> Settings
-        </button>
-
-        <button className="logout">
-          <FaSignOutAlt /> Logout
-        </button>
-
-      </div>
+    
 
     </div>
   );

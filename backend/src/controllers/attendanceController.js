@@ -156,6 +156,7 @@ const getClassAttendance = async (req, res) => {
 
 const sendMonthlyAttendanceToParents = async (req, res) => {
   try {
+    console.log("API HIT - Sending monthly emails");
     const { month, year, semester, section, department } = req.body;
 
     if (!month || !year || !semester || !section || !department) {
@@ -164,40 +165,35 @@ const sendMonthlyAttendanceToParents = async (req, res) => {
       });
     }
 
-    const students = await User.find({
-      role: "student",
-      semester,
-      section,
-      department,
-    });
+    const students = await User.find({ role: "student" });
+    console.log("Students found:", students.length);
 
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 1);
 
     for (const student of students) {
-      const records = await Attendance.find({
-        student: student._id,
-        semester,
-        section,
-        department,
-        date: { $gte: startDate, $lt: endDate },
-      });
+  const records = await Attendance.find({
+    student: student._id,
+    date: { $gte: startDate, $lt: endDate },
+  });
 
-      const totalClasses = records.length;
-      const presentCount = records.filter((r) => r.status === "present").length;
-      const absentCount = records.filter((r) => r.status === "absent").length;
+  const totalClasses = records.length;
+  const presentCount = records.filter((r) => r.status === "present").length;
+  const absentCount = records.filter((r) => r.status === "absent").length;
 
-      const percentage =
-        totalClasses > 0 ? ((presentCount / totalClasses) * 100).toFixed(2) : 0;
+  const percentage =
+    totalClasses > 0
+      ? ((presentCount / totalClasses) * 100).toFixed(2)
+      : 0;
 
-      if (student.parentEmail) {
-        await sendEmail({
-          to: student.parentEmail,
-          subject: `Monthly Attendance Report - ${student.name}`,
-          text: `Hello, attendance report for ${student.name} for ${month}/${year}:\n\nTotal Classes: ${totalClasses}\nPresent: ${presentCount}\nAbsent: ${absentCount}\nAttendance Percentage: ${percentage}%`,
-        });
-      }
-    }
+  if (student.parentEmail) {
+    await sendEmail({
+      to: student.parentEmail,
+      subject: `Monthly Attendance Report - ${student.name}`,
+      text: `Hello, attendance report for ${student.name} for ${month}/${year}:\n\nTotal Classes: ${totalClasses}\nPresent: ${presentCount}\nAbsent: ${absentCount}\nAttendance Percentage: ${percentage}%`,
+    });
+  }
+}
 
     return res.status(200).json({
       message: "Monthly attendance emails sent successfully",

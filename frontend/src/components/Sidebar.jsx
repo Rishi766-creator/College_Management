@@ -4,22 +4,35 @@ import {
   FaPaperPlane,
   FaCalendarAlt,
   FaCog,
-  FaSignOutAlt,FaBell
+  FaSignOutAlt,
+  FaBell
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // ✅ ADD THIS
 import "../styles/Sidebar.css";
 
 const Sidebar = ({ setActive }) => {
 
-  return (
+  const navigate = useNavigate(); // ✅
 
+  const handleLogout = () => {
+    console.log("logout function");
+    // 🧹 remove token
+    localStorage.removeItem("token");
+
+    // (optional) remove user info if stored
+    localStorage.removeItem("user");
+
+    // 🔁 redirect to login
+    navigate("/login");
+  };
+
+  return (
     <div className="sidebar">
 
       <div className="sidebar-top">
-
         <h2 className="logo">CMS</h2>
 
         <ul className="menu">
-
           <li onClick={() => setActive("attendance")}>
             <FaCalendarCheck /> Attendance
           </li>
@@ -36,31 +49,16 @@ const Sidebar = ({ setActive }) => {
             <FaCalendarAlt /> Events & Exams
           </li>
 
-            <li onClick={() => setActive("notices")}>
+          <li onClick={() => setActive("notices")}>
             <FaBell /> Notices
           </li>
-
-
         </ul>
-
       </div>
 
-      <div className="sidebar-bottom">
-
-        <button className="settings">
-          <FaCog /> Settings
-        </button>
-
-        <button className="logout">
-          <FaSignOutAlt /> Logout
-        </button>
-
-      </div>
+    
 
     </div>
-
   );
-
 };
 
 export default Sidebar;

@@ -41,6 +41,8 @@ app.use("/api/results", resultUploadRoutes);
 app.use("/api/templates", templateRoutes);
 app.use("/api/student-leaves", studentLeaveRoutes);
 app.use("/api/users", userRoutes);
+// At the bottom of server.js
+require("./cron/monthlyAttendance");
 
 const PORT = process.env.PORT || 5000;
 

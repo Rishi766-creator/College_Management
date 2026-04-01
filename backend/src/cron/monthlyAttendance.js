@@ -12,12 +12,15 @@ cron.schedule("0 0 1 * *", async () => {
       year -= 1;
     }
 
-    await sendMonthlyAttendanceToParents({
-      body: { month, year }
-    }, {
-      status: () => ({ json: console.log }),
-      json: console.log
-    });
+   await sendMonthlyAttendanceToParents(
+  {
+    body: { month, year },
+  },
+  {
+    status: () => ({ json: console.log }),
+    json: console.log,
+  }
+);
 
     console.log("Monthly attendance emails sent successfully (cron)");
   } catch (err) {

@@ -35,6 +35,9 @@ const AdminSidebar = ({ setActive }) => {
           <li onClick={() => setActive("notices")}>
             <FaBell /> Add Notices
           </li>
+           <li onClick={() => setActive("notices")}>
+            <FaBell /> My Notices
+          </li>
 
           <li onClick={() => setActive("events")}>
             <FaCalendarAlt /> Events & Exams
@@ -44,15 +47,7 @@ const AdminSidebar = ({ setActive }) => {
 
       </div>
 
-      <div className="sidebar-bottom">
-             <button className="settings">
-          <FaCog /> Settings
-        </button>
-        <button className="logout">
-          <FaSignOutAlt /> Logout
-        </button>
-
-      </div>
+    
 
     </div>
 

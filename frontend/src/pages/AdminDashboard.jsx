@@ -4,6 +4,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import Approvals from "../components/Approvals";
 import Certificates from "../components/Certificates";
 import ExamScheduling from "../components/ExamsScheduling";
+import Notices from "../components/Notices";
 import "../styles/AdminDashboard.css";
 import API from "../utils/axios";
 
@@ -205,6 +206,8 @@ const addNotice =async  () => {
           </div>
 
         );
+        case  "mynotices":
+        return <Notices/>;
 
       case "events":
 
@@ -213,10 +216,10 @@ const addNotice =async  () => {
           <div>
 
             <div className="page-header">
-              <h2>Upcoming Events / Exams</h2>
+              <h2>Upcoming Events </h2>
 
               <button onClick={()=>setShowEventForm(!showEventForm)}>
-                {showEventForm ? "Cancel" : "Add Event / Exam"}
+                {showEventForm ? "Cancel" : "Add Event"}
               </button>
 
             </div>
@@ -225,29 +228,6 @@ const addNotice =async  () => {
 
               <div className="form-box">
 
-                <div className="radio-group">
-
-                  <label className={eventType==="Event" ? "radio-btn active" : "radio-btn"}>
-                    <input
-                    type="radio"
-                    value="Event"
-                    checked={eventType==="Event"}
-                    onChange={(e)=>setEventType(e.target.value)}
-                    />
-                    Event
-                  </label>
-
-                  <label className={eventType==="Exam" ? "radio-btn active" : "radio-btn"}>
-                    <input
-                    type="radio"
-                    value="Exam"
-                    checked={eventType==="Exam"}
-                    onChange={(e)=>setEventType(e.target.value)}
-                    />
-                    Exam
-                  </label>
-
-                </div>
 
                 <input
                 placeholder="Title"
