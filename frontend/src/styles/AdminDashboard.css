@@ -182,7 +182,7 @@ transform:scale(1.2);
   justify-content: center;
 
   align-items: flex-start;   
-    padding-top: 40px;        
+    padding-top: 40px;    }    
 /* Center card */
 .results-box-dark {
   background: #1e293b; /* slightly lighter dark */
