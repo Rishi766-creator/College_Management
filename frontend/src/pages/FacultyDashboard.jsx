@@ -5,6 +5,7 @@ import FacultyApprovals from "../components/FacultyApprovals";
 import Events from "../components/Events";
 import Notices from "../components/Notices";
 import "../styles/FacultyDashboard.css";
+import FacultyRequests from "../components/FacultyRequests";
 
 const FacultyDashboard = () => {
   const [active, setActive] = useState("attendance");
@@ -14,6 +15,8 @@ const FacultyDashboard = () => {
     switch (active) {
       case "attendance":
         return <FacultyAttendance />;
+      case "facultyRequests":
+        return <FacultyRequests />;
       case "approvals":
         return <FacultyApprovals />;
       case "events":

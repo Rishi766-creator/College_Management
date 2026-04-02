@@ -23,7 +23,7 @@ const FacultyRequests = () => {
 
   const token = localStorage.getItem("token");
 
-  // 🔹 Handle input
+  // 🔹 Handle input change
   const handleInputChange = (e, type) => {
     const { name, value } = e.target;
 
@@ -39,10 +39,10 @@ const FacultyRequests = () => {
   // 🔹 Fetch Leave History
   const fetchLeaveHistory = async () => {
     try {
+      console.log("Fetching Leave...");
       const res = await API.get("/student-leaves/my", {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log("Leave:", res?.data);
       setLeaveHistory(res.data?.leaveRequests || []);
     } catch (err) {
       console.log("Leave Error:", err);
@@ -52,17 +52,17 @@ const FacultyRequests = () => {
   // 🔹 Fetch Event History
   const fetchEventHistory = async () => {
     try {
+      console.log("Fetching Event...");
       const res = await API.get("/event-requests/my", {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log("Event:", res?.data);
       setEventHistory(res.data?.requests || []);
     } catch (err) {
       console.log("Event Error:", err);
     }
   };
 
-  // ✅ FIXED useEffect (NO ERROR)
+  // 🔥 FIXED useEffect (SAFE VERSION)
   useEffect(() => {
     if (!token) {
       console.log("No token found");
@@ -70,8 +70,12 @@ const FacultyRequests = () => {
     }
 
     const fetchAll = async () => {
-      await fetchLeaveHistory();
-      await fetchEventHistory();
+      try {
+        await fetchLeaveHistory();
+        await fetchEventHistory();
+      } catch (err) {
+        console.log("useEffect Error:", err);
+      }
     };
 
     fetchAll();
@@ -89,9 +93,7 @@ const FacultyRequests = () => {
           toDate: leaveData.endDate,
           reason: leaveData.reason
         },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       fetchLeaveHistory();
@@ -114,9 +116,7 @@ const FacultyRequests = () => {
           proposedDate: eventData.date,
           venue: eventData.venue
         },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       fetchEventHistory();

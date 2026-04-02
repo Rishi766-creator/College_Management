@@ -22,9 +22,6 @@ const AdminSidebar = ({ setActive }) => {
             <FaUserCheck /> Approvals
           </li>
 
-          <li onClick={() => setActive("certificates")}>
-            <FaCertificate /> Certificates
-          </li>
 
           <li onClick={() => setActive("exams")}>
             <FaClipboardList /> Exam Scheduling
