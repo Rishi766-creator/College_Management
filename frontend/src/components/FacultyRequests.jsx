@@ -2,22 +2,129 @@ import React, { useState, useEffect } from "react";
 import "../styles/Requests.css";
 import API from "../utils/axios";
 
+const FacultyRequests = () => {
+  const [activeForm, setActiveForm] = useState(null);
 
-const Events = () => {
-  const [events,setEvents]=useState([]);
-  async function fetchEvents(){
-    const res=await API.get("/events/upcoming",{
-      headers:{
-        Authorization:`Bearer ${localStorage.getItem("token")}`
+  const [leaveData, setLeaveData] = useState({
+    reason: "",
+    startDate: "",
+    endDate: ""
+  });
+
+  const [eventData, setEventData] = useState({
+    name: "",
+    date: "",
+    description: "",
+    venue: ""
+  });
+
+  const [leaveHistory, setLeaveHistory] = useState([]);
+  const [eventHistory, setEventHistory] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  // 🔹 Handle input change
+  const handleInputChange = (e, type) => {
+    const { name, value } = e.target;
+
+    if (type === "leave") {
+      setLeaveData({ ...leaveData, [name]: value });
+    } else {
+      setEventData({ ...eventData, [name]: value });
+    }
+  };
+
+  const handleCancel = () => setActiveForm(null);
+
+  // 🔹 Fetch Leave History
+  const fetchLeaveHistory = async () => {
+    try {
+      console.log("Fetching Leave...");
+      const res = await API.get("/student-leaves/my", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLeaveHistory(res.data?.leaveRequests || []);
+    } catch (err) {
+      console.log("Leave Error:", err);
+    }
+  };
+
+  // 🔹 Fetch Event History
+  const fetchEventHistory = async () => {
+    try {
+      console.log("Fetching Event...");
+      const res = await API.get("/event-requests/my", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setEventHistory(res.data?.requests || []);
+    } catch (err) {
+      console.log("Event Error:", err);
+    }
+  };
+
+  // 🔥 FIXED useEffect (SAFE VERSION)
+  useEffect(() => {
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
+
+    const fetchAll = async () => {
+      try {
+        await fetchLeaveHistory();
+        await fetchEventHistory();
+      } catch (err) {
+        console.log("useEffect Error:", err);
       }
-    });
-    setEvents(res.data.events);
+    };
 
-    console.log(res?.data);
-  }
-  useEffect(()=>{
-      fetchEvents()
-    },[]);
+    fetchAll();
+  }, [token]);
+
+  // 🔹 Submit Leave
+  const handleLeaveRequest = async (e) => {
+    e.preventDefault();
+
+    try {
+      await API.post(
+        "/student-leaves",
+        {
+          fromDate: leaveData.startDate,
+          toDate: leaveData.endDate,
+          reason: leaveData.reason
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchLeaveHistory();
+      handleCancel();
+    } catch (err) {
+      console.log("Leave Submit Error:", err);
+    }
+  };
+
+  // 🔹 Submit Event
+  const handleEventRequest = async (e) => {
+    e.preventDefault();
+
+    try {
+      await API.post(
+        "/event-requests",
+        {
+          title: eventData.name,
+          description: eventData.description,
+          proposedDate: eventData.date,
+          venue: eventData.venue
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchEventHistory();
+      handleCancel();
+    } catch (err) {
+      console.log("Event Submit Error:", err);
+    }
+  };
 
   return (
     <div className="requests-card">
@@ -43,23 +150,6 @@ const Events = () => {
           Request Event
         </div>
       </div>
-      <div className="events-box">
-        <h2>Upcoming Exams</h2>
-        <div className="events-grid">
-          {exams.map((exam)=>(
-        
-            <div key={exam._id} className="event-box" style={{ borderLeftColor:exam.color }}>
-              <h3>{exam.subject}</h3>
-              <p className="event-date">{new Date(exam.examDate).toLocaleDateString()}</p>
-              <p className="event-desc">Dept:{exam.department} Section:{exam.section} Sem:{exam.semester}</p>
-              <p className="event-desc">StartTime:{exam.startTime}-EndTime:{exam.endTime}</p>
-             <p className="event-desc">Venue:{exam.venue}</p>
-            </div>
-          ))}
-
-        </div>
-      </div>
-      
 
       {/* 🔹 Leave Form */}
       {activeForm === "leave" && (

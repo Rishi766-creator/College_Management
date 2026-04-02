@@ -3,7 +3,7 @@ import {
   FaUserClock,
   FaBell,
   FaCalendarAlt,
-  FaSignOutAlt,
+  FaSignOutAlt,FaPaperPlane,
   FaCog
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
@@ -21,7 +21,9 @@ const FacultySidebar = ({ setActive }) => {
           <li onClick={() => setActive("attendance")}>
             <FaClipboardCheck /> Attendance
           </li>
-
+          <li onClick={() => setActive("facultyRequests")}>
+              <FaPaperPlane /> Faculty Requests
+          </li>
           <li onClick={() => setActive("approvals")}>
             <FaUserClock /> Leave Approvals
           </li>

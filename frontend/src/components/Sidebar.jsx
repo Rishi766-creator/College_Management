@@ -7,24 +7,12 @@ import {
   FaSignOutAlt,
   FaBell
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // ✅ ADD THIS
+
 import "../styles/Sidebar.css";
 
 const Sidebar = ({ setActive }) => {
 
-  const navigate = useNavigate(); // ✅
 
-  const handleLogout = () => {
-    console.log("logout function");
-    // 🧹 remove token
-    localStorage.removeItem("token");
-
-    // (optional) remove user info if stored
-    localStorage.removeItem("user");
-
-    // 🔁 redirect to login
-    navigate("/login");
-  };
 
   return (
     <div className="sidebar">

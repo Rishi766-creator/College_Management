@@ -79,19 +79,27 @@ const Requests = () => {
     setCertificateHistory(res.data.requests);
   }
 
-  useEffect(() => {
-    fetchLeaveHistory();
+  // useEffect(() => {
+  //   fetchLeaveHistory();
     
-  }, []);
-    useEffect(() => {
-    fetchCertificateHistory();
+  // }, []);
+  //   useEffect(() => {
+  //   fetchCertificateHistory();
     
-  }, []);
-    useEffect(() => {
-    fetchEventHistory();
+  // }, []);
+  //   useEffect(() => {
+  //   fetchEventHistory();
     
-  }, []);
+  // }, []);
+useEffect(() => {
+  const fetchAll = async () => {
+    await fetchLeaveHistory();
+    await fetchCertificateHistory();
+    await fetchEventHistory();
+  };
 
+  fetchAll();
+}, []);
   // 🔹 Certificate request
   const handleCertificateRequest = async (e) => {
     e.preventDefault();
