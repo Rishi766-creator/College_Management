@@ -5,6 +5,7 @@ import API from "../utils/axios";
 
 const Events = () => {
   const [events,setEvents]=useState([]);
+  const [exams,setExams]=useState([]);
   async function fetchEvents(){
     const res=await API.get("/events/upcoming",{
       headers:{
@@ -14,9 +15,19 @@ const Events = () => {
     setEvents(res.data.events);
 
     console.log(res?.data);
+  };
+  async function fetchExams(){
+    const res=await API.get("/exams/upcoming",{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    setExams(res.data.exams);
+    console.log(res?.data);
   }
   useEffect(()=>{
-      fetchEvents()
+      fetchEvents();
+      fetchExams();
     },[]);
 
   return (
@@ -35,6 +46,23 @@ const Events = () => {
 
         </div>
       </div>
+      <div className="events-box">
+        <h2>Upcoming Exams</h2>
+        <div className="events-grid">
+          {exams.map((exam)=>(
+        
+            <div key={exam._id} className="event-box" style={{ borderLeftColor:exam.color }}>
+              <h3>{exam.subject}</h3>
+              <p className="event-date">{new Date(exam.examDate).toLocaleDateString()}</p>
+              <p className="event-desc">Dept:{exam.department} Section:{exam.section} Sem:{exam.semester}</p>
+              <p className="event-desc">StartTime:{exam.startTime}-EndTime:{exam.endTime}</p>
+             <p className="event-desc">Venue:{exam.venue}</p>
+            </div>
+          ))}
+
+        </div>
+      </div>
+      
 
       
     </div>
