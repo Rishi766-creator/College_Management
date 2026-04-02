@@ -79,18 +79,7 @@ const Requests = () => {
     setCertificateHistory(res.data.requests);
   }
 
-  // useEffect(() => {
-  //   fetchLeaveHistory();
-    
-  // }, []);
-  //   useEffect(() => {
-  //   fetchCertificateHistory();
-    
-  // }, []);
-  //   useEffect(() => {
-  //   fetchEventHistory();
-    
-  // }, []);
+  
 useEffect(() => {
   const fetchAll = async () => {
     await fetchLeaveHistory();
