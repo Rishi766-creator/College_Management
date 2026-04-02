@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../utils/axios";
 
 const ExamScheduling = () => {
   const [subject, setSubject] = useState("");
@@ -10,27 +11,30 @@ const ExamScheduling = () => {
   const [section, setSection] = useState("");
   const [department, setDepartment] = useState("");
 
-  const addExam = () => {
-    const examData = {
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    const res=await API.post("/exams",{
       subject,
-      date,
+      examDate:date,
       startTime,
       endTime,
       venue,
       semester,
       section,
-      department,
-    };
-
-    console.log(examData);
-    alert("Exam Added");
-  };
+      department
+    },{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(res?.data);
+  }
 
   return (
     <div>
       <h2>Exam Scheduling</h2>
 
-      <div className="form-box">
+      <form className="form-box" onSubmit={handleSubmit}>
         <label>Subject:</label>
         <input
           type="text"
@@ -92,8 +96,8 @@ const ExamScheduling = () => {
           onChange={(e) => setDepartment(e.target.value)}
         />
 
-        <button onClick={addExam}>Add Exam</button>
-      </div>
+        <button type="submit">Add Exam</button>
+      </form>
     </div>
   );
 };

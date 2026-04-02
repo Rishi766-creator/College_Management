@@ -1,197 +1,33 @@
-// import React, { useState } from "react";
-// import "../styles/Requests.css";
-// import API from "../utils/axios";
-
-// const Requests = () => {
-//   const [activeForm, setActiveForm] = useState(null);
-//   const [leaveData, setLeaveData] = useState({ reason: "", startDate: "", endDate: "" });
-//   const [certificateData, setCertificateData] = useState({ type: "", purpose: "" });
-//   const [eventData, setEventData] = useState({ name: "", date: "", description: "" ,venue: ""});
-
-//   const handleInputChange = (e, formType) => {
-//     const { name, value } = e.target;
-//     if (formType === "leave") setLeaveData({ ...leaveData, [name]: value });
-//     else if (formType === "certificate") setCertificateData({ ...certificateData, [name]: value });
-//     else setEventData({ ...eventData, [name]: value });
-//   };
-
-  
-
-//   const handleCertificateRequest=async (e)=>{
-//     e.preventDefault();
-//     const res=await API.post("/certificates",{
-//       certificateType:certificateData.type,
-//       reason:certificateData.purpose
-
-//     },{
-//       headers:{
-//       Authorization:`Bearer ${localStorage.getItem("token")}`
-    
-//     }});
-//     console.log(res?.data);
-//   };
-//   const handleLeaveRequest=async(e)=>{
-//     e.preventDefault();
-//     const res=await API.post("/student-leaves",{
-//       fromDate:leaveData.startDate,
-//       toDate:leaveData.endDate,
-//       reason:leaveData.reason
-//     },{
-//       headers:{
-//         Authorization:`Bearer ${localStorage.getItem("token")}`
-//       }
-//     });
-//     cosole.log(res?.data);
-//   }
-//   const handleEventRequest=async(e)=>{
-//     e.preventDefault();
-
-//     const res=await API.post("/event-requests",{
-//       title:eventData.name,
-//       description:eventData.description,
-//       proposedDate:eventData.date,
-//       venue:eventData.venue
-
-//     },{
-//       headers:{
-//         Authorization:`Bearer ${localStorage.getItem("token")}`
-
-//       }
-//     });
-
-//   }
-
-//   function handleCancel(){
-//     setActiveForm(null);
-//   }
-
-//   return (
-//     <div className="requests-card">
-//       <h2>Requests</h2>
-//       <div className="request-grid">
-//         <div
-//           className="request-box leave-box"
-//           onClick={() => setActiveForm(activeForm === "leave" ? null : "leave")}
-//         >
-//           Leave Request
-//         </div>
-//         <div
-//           className="request-box certificate-box"
-//           onClick={() => setActiveForm(activeForm === "certificate" ? null : "certificate")}
-//         >
-//           Certificate Request
-//         </div>
-//         <div
-//           className="request-box event-box"
-//           onClick={() => setActiveForm(activeForm === "event" ? null : "event")}
-//         >
-//           Event Request
-//         </div>
-//       </div>
-
-//       {activeForm === "leave" && (
-//         <form className="request-form" onSubmit={handleLeaveRequest}>
-//           <div className="form-row">
-//             <label>Reason:</label>
-//             <input type="text" name="reason" value={leaveData.reason} onChange={(e) => handleInputChange(e, "leave")} required />
-//           </div>
-//           <div className="form-row">
-//             <label>Start Date:</label>
-//             <input type="date" name="startDate" value={leaveData.startDate} onChange={(e) => handleInputChange(e, "leave")} required />
-//           </div>
-//           <div className="form-row">
-//             <label>End Date:</label>
-//             <input type="date" name="endDate" value={leaveData.endDate} onChange={(e) => handleInputChange(e, "leave")} required />
-//           </div>
-//           <div className="form-buttons">
-//             <button type="submit">Submit</button>
-//             <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
-//           </div>
-//         </form>
-//       )}
-
-//       {activeForm === "certificate" && (
-//         <form className="request-form" onSubmit={handleCertificateRequest}>
-//           <div className="form-row">
-//             <label>Certificate Type:</label>
-//             <input type="text" name="type" value={certificateData.type} onChange={(e) => handleInputChange(e, "certificate")} required />
-//           </div>
-//           <div className="form-row">
-//             <label>Purpose:</label>
-//             <input type="text" name="purpose" value={certificateData.purpose} onChange={(e) => handleInputChange(e, "certificate")} required />
-//           </div>
-//           <div className="form-buttons">
-//             <button type="submit">Submit</button>
-//             <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
-//           </div>
-//         </form>
-//       )}
-
-//       {activeForm === "event" && (
-//         <form className="request-form" onSubmit={handleEventRequest}>
-//           <div className="form-row">
-//             <label>Event Name:</label>
-//             <input type="text" name="name" value={eventData.name} onChange={(e) => handleInputChange(e, "event")} required />
-//           </div>
-//           <div className="form-row">
-//             <label>Date:</label>
-//             <input type="date" name="date" value={eventData.date} onChange={(e) => handleInputChange(e, "event")} required />
-//           </div>
-//           <div className="form-row">
-//             <label>Description:</label>
-//             <input type="text" name="description" value={eventData.description} onChange={(e) => handleInputChange(e, "event")} required />
-//           </div>
-//            <div className="form-row">
-//             <label>Event venue:</label>
-//             <input type="text" name="venue" value={eventData.venue} onChange={(e) => handleInputChange(e, "event")} required />
-//           </div>
-//           <div className="form-buttons">
-//             <button type="submit">Submit</button>
-//             <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
-//           </div>
-//         </form>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Requests;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Requests.css";
+import API from "../utils/axios";
 
 const Requests = () => {
   const [activeForm, setActiveForm] = useState(null);
 
   const [leaveData, setLeaveData] = useState({
-    reason: "", startDate: "", endDate: ""
+    reason: "",
+    startDate: "",
+    endDate: ""
   });
 
   const [certificateData, setCertificateData] = useState({
-    type: "", purpose: ""
+    type: "",
+    purpose: ""
   });
 
   const [eventData, setEventData] = useState({
-    name: "", date: "", description: "", venue: ""
+    name: "",
+    date: "",
+    description: "",
+    venue: ""
   });
 
-  // ✅ Dummy History Data
-  const [history, setHistory] = useState([
-    {
-      type: "Leave",
-      title: "2026-04-01 to 2026-04-03",
-      description: "Sick leave",
-      date: "01/04/2026"
-    },
-    {
-      type: "Certificate",
-      title: "Bonafide",
-      description: "For internship",
-      date: "30/03/2026"
-    }
-  ]);
+  const [leaveHistory, setLeaveHistory] = useState([]);
+  const [certificateHistory,setCertificateHistory]=useState([]);
+  const [eventHistory,setEventHistory]=useState([]);
 
-  // Handle input
+  // 🔹 Handle input changes
   const handleInputChange = (e, formType) => {
     const { name, value } = e.target;
 
@@ -204,62 +40,141 @@ const Requests = () => {
     }
   };
 
-  // Add to history
-  const addToHistory = (item) => {
-    setHistory([item, ...history]);
-  };
-
-  // Submit handlers (Frontend only)
-  const handleLeaveRequest = (e) => {
-    e.preventDefault();
-
-    addToHistory({
-      type: "Leave",
-      title: `${leaveData.startDate} to ${leaveData.endDate}`,
-      description: leaveData.reason,
-      date: new Date().toLocaleDateString()
-    });
-
-    setLeaveData({ reason: "", startDate: "", endDate: "" });
+  // 🔹 Cancel form
+  const handleCancel = () => {
     setActiveForm(null);
   };
 
-  const handleCertificateRequest = (e) => {
+  // 🔹 Fetch history
+  const fetchLeaveHistory=async ()=>{
+    const res=await API.get("/student-leaves/my",{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(res?.data);
+    setLeaveHistory(res.data.leaveRequests);
+    
+
+  };
+  const fetchEventHistory=async ()=>{
+    const res=await API.get("/event-requests/my",{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(res?.data);
+    setEventHistory(res.data.requests);
+    
+
+  };
+  const fetchCertificateHistory=async ()=>{
+    const res=await API.get("/certificates/my",{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    
+    console.log(res?.data);
+    setCertificateHistory(res.data.requests);
+  }
+
+  useEffect(() => {
+    fetchLeaveHistory();
+    
+  }, []);
+    useEffect(() => {
+    fetchCertificateHistory();
+    
+  }, []);
+    useEffect(() => {
+    fetchEventHistory();
+    
+  }, []);
+
+  // 🔹 Certificate request
+  const handleCertificateRequest = async (e) => {
     e.preventDefault();
 
-    addToHistory({
-      type: "Certificate",
-      title: certificateData.type,
-      description: certificateData.purpose,
-      date: new Date().toLocaleDateString()
-    });
+    try {
+      await API.post(
+        "/certificates",
+        {
+          certificateType: certificateData.type,
+          reason: certificateData.purpose
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
 
-    setCertificateData({ type: "", purpose: "" });
-    setActiveForm(null);
+      fetchCertificateHistory(); // refresh history
+      handleCancel();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleEventRequest = (e) => {
+  // 🔹 Leave request
+  const handleLeaveRequest = async (e) => {
     e.preventDefault();
 
-    addToHistory({
-      type: "Event",
-      title: eventData.name,
-      description: eventData.description,
-      date: new Date().toLocaleDateString()
-    });
+    try {
+      await API.post(
+        "/student-leaves",
+        {
+          fromDate: leaveData.startDate,
+          toDate: leaveData.endDate,
+          reason: leaveData.reason
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
 
-    setEventData({ name: "", date: "", description: "", venue: "" });
-    setActiveForm(null);
+      fetchLeaveHistory();
+      handleCancel();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 🔹 Event request
+  const handleEventRequest = async (e) => {
+    e.preventDefault();
+
+    try {
+      await API.post(
+        "/event-requests",
+        {
+          title: eventData.name,
+          description: eventData.description,
+          proposedDate: eventData.date,
+          venue: eventData.venue
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      fetchEventHistory();
+      handleCancel();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="requests-card">
-
       <h2>Requests</h2>
 
-      {/* 🔷 Request Boxes */}
       <div className="request-grid">
-
         <div
           className="request-box leave-box"
           onClick={() => setActiveForm(activeForm === "leave" ? null : "leave")}
@@ -269,7 +184,9 @@ const Requests = () => {
 
         <div
           className="request-box certificate-box"
-          onClick={() => setActiveForm(activeForm === "certificate" ? null : "certificate")}
+          onClick={() =>
+            setActiveForm(activeForm === "certificate" ? null : "certificate")
+          }
         >
           Certificate Request
         </div>
@@ -280,135 +197,166 @@ const Requests = () => {
         >
           Event Request
         </div>
-
       </div>
 
-      {/* 🔷 Leave Form */}
+      {/* 🔹 Leave Form */}
       {activeForm === "leave" && (
         <form className="request-form" onSubmit={handleLeaveRequest}>
+          <input
+            type="text"
+            name="reason"
+            placeholder="Reason"
+            value={leaveData.reason}
+            onChange={(e) => handleInputChange(e, "leave")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Reason:</label>
-            <input type="text" name="reason"
-              value={leaveData.reason}
-              onChange={(e)=>handleInputChange(e,"leave")} required />
-          </div>
+          <input
+            type="date"
+            name="startDate"
+            value={leaveData.startDate}
+            onChange={(e) => handleInputChange(e, "leave")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Start Date:</label>
-            <input type="date" name="startDate"
-              value={leaveData.startDate}
-              onChange={(e)=>handleInputChange(e,"leave")} required />
-          </div>
+          <input
+            type="date"
+            name="endDate"
+            value={leaveData.endDate}
+            onChange={(e) => handleInputChange(e, "leave")}
+            required
+          />
 
-          <div className="form-row">
-            <label>End Date:</label>
-            <input type="date" name="endDate"
-              value={leaveData.endDate}
-              onChange={(e)=>handleInputChange(e,"leave")} required />
-          </div>
-
-          <div className="form-buttons">
-            <button type="submit">Submit</button>
-            <button type="button" className="cancel-btn"
-              onClick={()=>setActiveForm(null)}>Cancel</button>
-          </div>
-
+          <button type="submit">Submit</button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
         </form>
       )}
 
-      {/* 🔷 Certificate Form */}
+      {/* 🔹 Certificate Form */}
       {activeForm === "certificate" && (
         <form className="request-form" onSubmit={handleCertificateRequest}>
+          <input
+            type="text"
+            name="type"
+            placeholder="Certificate Type"
+            value={certificateData.type}
+            onChange={(e) => handleInputChange(e, "certificate")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Certificate Type:</label>
-            <input type="text" name="type"
-              value={certificateData.type}
-              onChange={(e)=>handleInputChange(e,"certificate")} required />
-          </div>
+          <input
+            type="text"
+            name="purpose"
+            placeholder="Purpose"
+            value={certificateData.purpose}
+            onChange={(e) => handleInputChange(e, "certificate")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Purpose:</label>
-            <input type="text" name="purpose"
-              value={certificateData.purpose}
-              onChange={(e)=>handleInputChange(e,"certificate")} required />
-          </div>
-
-          <div className="form-buttons">
-            <button type="submit">Submit</button>
-            <button type="button" className="cancel-btn"
-              onClick={()=>setActiveForm(null)}>Cancel</button>
-          </div>
-
+          <button type="submit">Submit</button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
         </form>
       )}
 
-      {/* 🔷 Event Form */}
+      {/* 🔹 Event Form */}
       {activeForm === "event" && (
+        <>
         <form className="request-form" onSubmit={handleEventRequest}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Event Name"
+            value={eventData.name}
+            onChange={(e) => handleInputChange(e, "event")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Event Name:</label>
-            <input type="text" name="name"
-              value={eventData.name}
-              onChange={(e)=>handleInputChange(e,"event")} required />
-          </div>
+          <input
+            type="date"
+            name="date"
+            value={eventData.date}
+            onChange={(e) => handleInputChange(e, "event")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Date:</label>
-            <input type="date" name="date"
-              value={eventData.date}
-              onChange={(e)=>handleInputChange(e,"event")} required />
-          </div>
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={eventData.description}
+            onChange={(e) => handleInputChange(e, "event")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Description:</label>
-            <input type="text" name="description"
-              value={eventData.description}
-              onChange={(e)=>handleInputChange(e,"event")} required />
-          </div>
+          <input
+            type="text"
+            name="venue"
+            placeholder="Venue"
+            value={eventData.venue}
+            onChange={(e) => handleInputChange(e, "event")}
+            required
+          />
 
-          <div className="form-row">
-            <label>Venue:</label>
-            <input type="text" name="venue"
-              value={eventData.venue}
-              onChange={(e)=>handleInputChange(e,"event")} required />
-          </div>
-
-          <div className="form-buttons">
-            <button type="submit">Submit</button>
-            <button type="button" className="cancel-btn"
-              onClick={()=>setActiveForm(null)}>Cancel</button>
-          </div>
-
+          <button type="submit">Submit</button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
         </form>
+        </>
       )}
-
-      {/* 🔥 HISTORY SECTION */}
       <div className="history-section">
+    <h3>Event History</h3>
 
-        <h3 style={{ color: "white", textAlign: "center" }}>
-          Request History
-        </h3>
+    {eventHistory.length === 0 ? (
+      <p>No event requests</p>
+    ) : (
+      eventHistory.map((event, index) => (
+        <div key={index} className="history-card">
+          <p><b>Title:</b> {event.title}</p>
+          <p><b>Date:</b> {event.proposedDate}</p>
+          <p><b>Venue:</b> {event.venue}</p>
+          <p><b>Status:</b> {event.status}</p>
+        </div>
+      ))
+    )}
+  </div>
+  <div className="history-section">
+    <h3>Leave History</h3>
 
-        {history.map((item, index) => (
-          <div key={index} className={`history-card ${item.type.toLowerCase()}`}>
+    {leaveHistory.length === 0 ? (
+      <p>No leave requests</p>
+    ) : (
+      leaveHistory.map((leave, index) => (
+        <div key={index} className="history-card">
+          <p><b>Reason:</b> {leave.reason}</p>
+          <p><b>From Date:</b> {leave.fromDate}</p>
+          <p><b>To Date:</b> {leave.toDate}</p>
+          <p><b>Status:</b> {leave.status}</p>
+        </div>
+      ))
+    )}
+  </div>
+  <div className="history-section">
+    <h3>Certificate History</h3>
 
-            <div className="history-info">
-              <span className="history-type">{item.type}</span>
-              <span className="history-title">{item.title}</span>
-              <span className="history-desc">{item.description}</span>
-            </div>
+    {certificateHistory.length === 0 ? (
+      <p>No certificate requests</p>
+    ) : (
+      certificateHistory.map((certificate, index) => (
+        <div key={index} className="history-card">
+          <p><b>Certificate Type:</b> {certificate.certificateType}</p>
+          <p><b>Reason:</b> {certificate.reason}</p>
 
-            <div className="history-date">
-              {item.date}
-            </div>
-
-          </div>
-        ))}
-
-      </div>
+          <p><b>Status:</b> {certificate.status}</p>
+        
+        </div>
+      ))
+    )}
+  </div>
 
     </div>
   );
