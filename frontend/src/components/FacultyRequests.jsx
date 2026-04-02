@@ -37,70 +37,59 @@ const FacultyRequests = () => {
   const handleCancel = () => setActiveForm(null);
 
   // 🔹 Fetch Leave History
-  const fetchLeaveHistory = async () => {
-    try {
-      console.log("Fetching Leave...");
-      const res = await API.get("/student-leaves/my", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setLeaveHistory(res.data?.leaveRequests || []);
-    } catch (err) {
-      console.log("Leave Error:", err);
-    }
-  };
+  async function fetchLeaveHistory(){
+    const res=await API.get("/faculty-leaves/my",{
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+    });
+    console.log(res?.data);
+    setLeaveHistory(res.data.leaveRequests);
+  }
 
   // 🔹 Fetch Event History
-  const fetchEventHistory = async () => {
-    try {
-      console.log("Fetching Event...");
-      const res = await API.get("/event-requests/my", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setEventHistory(res.data?.requests || []);
-    } catch (err) {
-      console.log("Event Error:", err);
-    }
-  };
+  async function fetchEventHistory(){
+    const res=await API.get("/event-requests/my",{
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+    });
+    console.log(res?.data);
+    setEventHistory(res.data.requests);
+  }
+
+  
 
   // 🔥 FIXED useEffect (SAFE VERSION)
-  useEffect(() => {
-    if (!token) {
-      console.log("No token found");
-      return;
-    }
+  useEffect(
+    ()=>{
+      fetchLeaveHistory();
+      fetchEventHistory();
+    },[]
+  )
+  
 
-    const fetchAll = async () => {
-      try {
-        await fetchLeaveHistory();
-        await fetchEventHistory();
-      } catch (err) {
-        console.log("useEffect Error:", err);
-      }
-    };
-
-    fetchAll();
-  }, [token]);
+    
 
   // 🔹 Submit Leave
   const handleLeaveRequest = async (e) => {
     e.preventDefault();
+    try{
+    const res=await API.post("/faculty-leaves",{
+      fromDate:leaveData.startDate,
+      toDate:leaveData.endDate,
+      reason:leaveData.reason
+    },{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(res?.data);
+  }catch(err){
+    console.log(err.response.data);
+  }
 
-    try {
-      await API.post(
-        "/student-leaves",
-        {
-          fromDate: leaveData.startDate,
-          toDate: leaveData.endDate,
-          reason: leaveData.reason
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      fetchLeaveHistory();
-      handleCancel();
-    } catch (err) {
-      console.log("Leave Submit Error:", err);
-    }
+    
   };
 
   // 🔹 Submit Event
@@ -108,7 +97,7 @@ const FacultyRequests = () => {
     e.preventDefault();
 
     try {
-      await API.post(
+       const res=await API.post(
         "/event-requests",
         {
           title: eventData.name,
@@ -116,11 +105,13 @@ const FacultyRequests = () => {
           proposedDate: eventData.date,
           venue: eventData.venue
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
+      console.log(res?.data);
+      
 
-      fetchEventHistory();
-      handleCancel();
+      
+    
     } catch (err) {
       console.log("Event Submit Error:", err);
     }

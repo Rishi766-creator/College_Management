@@ -3,6 +3,16 @@ import API from "../utils/axios";
 const Approvals = () => {
   const [certificates,setCertificates]=useState([]);
   const [events,setEvents]=useState([]);
+  const [facultyLeave,setFacultyLeave]=useState([]);
+  async function getFacultyLeave(){
+    const res=await API.get("/faculty-leaves",{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(res?.data);
+    setFacultyLeave(res.data.leaveRequests);
+  }
   async function getCertificateRequest(){
     const res=await API.get('/certificates',{
       headers:{
@@ -51,6 +61,31 @@ const Approvals = () => {
     console.log(err);
   }
 };
+const updateLeaveStatus = async (id, status) => {
+  try {
+    const body =
+      status === "approved"
+        ? { status: "approved" }
+        : {
+            status: "rejected",
+            rejectionReason: "Not valid" // later make input
+          };
+
+    const res = await API.patch(`/event-requests/${id}/status`, body, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    console.log(res.data);
+
+    // 🔥 Refresh events after update
+    getFacultyLeaveRequest();
+
+  } catch (err) {
+    console.log(err.response?.data);
+  }
+};
 const updateEventStatus = async (id, status) => {
   try {
     const body =
@@ -79,6 +114,7 @@ const updateEventStatus = async (id, status) => {
   useEffect(()=>{
     getCertificateRequest();
     getEventRequest();
+    getFacultyLeave();
   },[])
 
   return (
@@ -101,12 +137,20 @@ const updateEventStatus = async (id, status) => {
 
       <h2>Faculty Leave Requests</h2>
 
-     
-      <div className="notice-box">
-        <h3>Leave Request - Anitha</h3>
-        <button className="approve">Approve</button>
-        <button className="reject">Reject</button>
+      {facultyLeave.filter(l=>l.status==="pending").map((l)=>(
+         <div className="notice-box" key={l._id}>
+        <h3>LeaveRequest-{l.faculty.name}</h3>
+        <p>{l.reason}</p>
+        <p>From:{new Date(l.fromDate).toLocaleDateString()}-To:{new Date(l.toDate).toLocaleDateString()}</p>
+        <button className="approve" onClick={() => updateLeaveStatus(l._id, "approved")}>Approve</button>
+        <button className="reject" onClick={() => updateLeaveStatus(l._id, "rejected")}>Reject</button>
       </div>
+
+
+      ))}
+
+     
+      
 
       <h2>Event Requests</h2>
       {
